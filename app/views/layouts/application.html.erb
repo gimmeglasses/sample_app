@@ -1,7 +1,12 @@
+<!-- # application template -->
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sample App</title>
+<!--    #<title>Sample App</title>. -->
+    <title>
+      <%= yield :head %> | Ruby on Rails Tutorial Sample App
+    </title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +16,7 @@
   </head>
 
   <body>
+    <!-- # home/help/about template goes into here -->
     <%= yield %>
   </body>
 </html>
