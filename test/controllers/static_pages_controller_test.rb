@@ -11,7 +11,9 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     get static_pages_home_url
     assert_response :success
     # HTML title should be like below
-    assert_select 'title', "Home | #{@base_title}"
+    # assert_select 'title', "Home | #{@base_title}"
+    # we should remove "Home |" in title
+    assert_select 'title', "#{@base_title}"
   end
 
   test 'should get help' do
