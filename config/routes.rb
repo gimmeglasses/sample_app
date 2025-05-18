@@ -28,4 +28,9 @@ Rails.application.routes.draw do
   get  '/about',   to: 'static_pages#about'   # /about にアクセスすると　static_pages#about　(app/controllers/static_pages_controller.rb)　アクションが呼ばれる
   get  '/contact', to: 'static_pages#contact'
   get  '/signup',  to: 'users#new'            # GETリクエストが/signupに送信されたときにUsersコントローラーのnewアクションを呼び出してくれるようになる。
+
+  resources :users
+  # => get  'users',      to: 'users#index'
+  # => get  'users/:id',  to: 'users#show'
+  # => get  'users/new',  to: 'users#new'
 end

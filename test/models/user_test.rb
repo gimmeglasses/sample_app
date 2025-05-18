@@ -4,7 +4,9 @@ class UserTest < ActiveSupport::TestCase
   # setup method is run before each test
   def setup
     @user = User.new(name: "Example User", email: "user@example.com",
-                     # passwordは、has_secure_passwordメソッドによってDBに登録されない
+                     # passwordとpassword_confirmationは、has_secure_passwordメソッドによって追加された仮想的な属性
+                     # DBにはpasswordから入力された平文パスワードをハッシュ化した値がpassword_digestに登録される。
+                     # これらのカラムはDBにはないので登録されない。
                      password: "foobarxxx", password_confirmation: "foobarxxx")
   end
 
