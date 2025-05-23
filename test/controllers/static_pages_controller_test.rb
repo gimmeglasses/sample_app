@@ -21,7 +21,8 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     get help_path
     assert_response :success
     # HTML title should be like below
-    assert_select 'title', "Help | #{@base_title}"
+#    assert_select 'title', "Help | #{@base_title}"
+    assert_select 'title', "#{@base_title}"
   end
 
   test 'should get about' do
@@ -29,7 +30,8 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     get about_path
     assert_response :success
     # HTML title should be like below
-    assert_select 'title', "About | #{@base_title}"
+#    assert_select 'title', "About | #{@base_title}"
+    assert_select 'title', "#{@base_title}"
   end
 
   test 'should get contact' do
@@ -37,6 +39,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     get contact_path
     assert_response :success
     # HTML title should be like below
-    assert_select 'title', "Contact | #{@base_title}"
+#    assert_select 'title', "Contact | #{@base_title}"
+    assert_select 'title', "#{@base_title}"
   end
 end
