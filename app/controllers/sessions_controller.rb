@@ -38,9 +38,9 @@ class SessionsController < ApplicationController
       # renderメソッドで強制的に再レンダリングしてもリクエストと見なされないため、リクエストのメッセージが消えない。
     end
   end
-
+  
   def destroy
-    log_out
-    redirect_to root_url, status: :see_other
+    log_out # 現在のユーザーをログアウトする
+    redirect_to root_url, status: :see_other # リダイレクト先のURLを指定する
   end
 end
