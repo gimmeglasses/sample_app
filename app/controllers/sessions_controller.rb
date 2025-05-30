@@ -14,12 +14,18 @@ class SessionsController < ApplicationController
     # if !user.nil? && user.authenticate(parames[:session][:password])
     # 以下と上記は同じ意味
     if user && user.authenticate(params[:session][:password])
+    
       # success
+      # 
+      forwarding_url = session[:forwarding_url] # フレンドリーフォワーディングのために、リダイレクト先のURLを取得する
       # reset_session should be called before log_in
       reset_session
+      remember user # 永続的セッションのためにユーザーをデータベースに記憶する
       log_in user
       # redirect_to user_url(user) と同じ意味
-      redirect_to user
+      # redirect_to user
+      
+      redirect_to forwarding_url || user
     else
       # failure
       # flash message

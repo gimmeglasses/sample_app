@@ -4,7 +4,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.8"
 
 gem "rails",           "7.0.4.3"
-gem "bcrypt",          "3.1.18"
+gem "bcrypt",          "3.1.18" # パスワードのハッシュ化に使用するgem
+gem "faker",           "2.21.0" # テストデータを生成するためのgem
+gem "will_paginate",           "3.3.1" # ページネーションを実装するためのgem
+gem "bootstrap-will_paginate", "1.0.0" # Bootstrapとwill_paginateを統合するためのgem
 gem "bootstrap-sass",  "3.4.1"
 gem "sassc-rails",     "2.1.2"
 gem "sprockets-rails", "3.4.2"
