@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy
+  # dependent: :destroyは、ユーザーが削除された場合に、そのユーザーに関連するマイクロポストも削除されることを意味する
+  # 
   attr_accessor :remember_token
   # "before_save" (コールバック) works before the record is saved to the database
   # provided email address is downcased, thus no need of case_sensitive
@@ -57,5 +60,12 @@ class User < ApplicationRecord
   # この記憶ダイジェストを再利用しているのは単に利便性のため
   def session_token
     remember_digest || remember
+  end
+
+  # 試作feedの定義
+  # 完全な実装は次章の「ユーザーをフォローする」を参照
+  def feed
+    Micropost.where("user_id = ?", id)
+    # ?があることで、SQLクエリに代入する前にidがエスケープされるため、SQLインジェクション（SQL Injection）と呼ばれる深刻なセキュリティホールを回避できる
   end
 end

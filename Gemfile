@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.8"
 
 gem "rails",           "7.0.4.3"
+gem "active_storage_validations", "0.9.8" # Active Storageのバリデーションを追加するためのgem
+gem "image_processing",           "1.12.2" # 画像処理を行うためのgem
 gem "bcrypt",          "3.1.18" # パスワードのハッシュ化に使用するgem
 gem "faker",           "2.21.0" # テストデータを生成するためのgem
 gem "will_paginate",           "3.3.1" # ページネーションを実装するためのgem
@@ -45,3 +47,7 @@ end
 
 # Windows ではタイムゾーン情報用の tzinfo-data gem を含める必要があります
 # gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+
+group :production do
+  gem "aws-sdk-s3", "1.114.0", require: false
+end

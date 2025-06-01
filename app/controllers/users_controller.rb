@@ -19,7 +19,8 @@ class UsersController < ApplicationController
     # @user = User.first
     # @@user = class (global) variable <- viewから参照できるが、クラス全体で共有される　Railsでは使用しない
     # @@user = User.find(params[:id])
-    'hogehoge'
+    
+    @microposts = @user.microposts.paginate(page: params[:page])
 
     # debugger
     # debuggerは、Railsのデバッグツールで、実行を一時停止して、変数の値を確認できる
@@ -128,13 +129,14 @@ class UsersController < ApplicationController
     # beforeフィルタ
 
     # ログイン済みユーザーかどうか確認
-    def logged_in_user
-      unless logged_in?
-        store_location # ログイン前のURLを保存する
-        flash[:danger] = "Please log in."
-        redirect_to login_url, status: :see_other
-      end
-    end
+    #def logged_in_user
+    #  unless logged_in?
+    #    store_location # ログイン前のURLを保存する
+    #    flash[:danger] = "Please log in."
+    #    redirect_to login_url, status: :see_other
+    #  end
+    #end
+    # application_controller.rbに定義することにしたので、ここではコメントアウトしている
 
     # 正しいユーザーかどうか確認
     def correct_user

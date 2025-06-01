@@ -88,4 +88,17 @@ class UserTest < ActiveSupport::TestCase
     @user.password = @user.password_confirmation = "a" * 7
     assert_not @user.valid?, "#{@user.password.inspect} should be invalid"
   end
+
+  test "associated microposts should be destroyed" do
+    @user.save # Save the user to the database
+    @user.microposts.create!(content: "Lorem ipsum") # Create an associated micropost
+    assert_difference 'Micropost.count', -1 do       
+      @user.destroy                                  
+    end
+    # The assert_difference method checks 
+    # that the count of Microposts decreases by 1 when the user is destroyed
+    # do ... end works before assert_difference
+    # @user.microposts.create!(content: "Lorem ipsum") creates a micropost associated with the user
+    # assert_difference 'Micropost.count', -1 do checks that the count of Microposts decreases by 1 when the user is destroyed
+  end
 end
