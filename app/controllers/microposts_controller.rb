@@ -3,8 +3,11 @@ class MicropostsController < ApplicationController
   before_action :correct_user,   only: :destroy
   # createアクションは、マイクロポストを作成するためのアクション
   def create
-    @micropost = current_user.microposts.build(micropost_params)
+    # current_user.microposts.buildは、現在のユーザに紐づくマイクロポストを作成するためのメソッド
+    @micropost = current_user.microposts.build(micropost_params) 
+    # マイクロポストの画像を添付する
     @micropost.image.attach(params[:micropost][:image])
+    # マイクロポストの保存する
     if @micropost.save
       flash[:success] = "Micropost created!"
       redirect_to root_url
@@ -20,6 +23,7 @@ class MicropostsController < ApplicationController
 
   # destroyアクションは、マイクロポストを削除するためのアクション
   def destroy
+    # current_user.microposts.find_by(id: params[:id])は、現在のユーザに紐づくマイクロポストを取得する
     @micropost.destroy
     flash[:success] = "Micropost deleted"
     if request.referrer.nil?
@@ -30,12 +34,14 @@ class MicropostsController < ApplicationController
   end
 
   private
-
+    # strong_parametersを使用して、マイクロポストのパラメータを取得する
     def micropost_params
+      # params.require(:micropost)は、マイクロポストのパラメータを取得する
       params.require(:micropost).permit(:content, :image)
     end
-    
+
     def correct_user
+      # current_user.microposts.find_by(id: params[:id])は、現在のユーザに紐づくマイクロポストを取得する
       @micropost = current_user.microposts.find_by(id: params[:id])
       redirect_to root_url, status: :see_other if @micropost.nil?
     end
