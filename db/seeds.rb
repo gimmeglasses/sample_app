@@ -5,6 +5,13 @@ User.create!(name:  "Example User",
              password_confirmation: "12345678",
              admin: true)
 
+User.create!(
+  name: "Example User",
+  email: "example@example.com",
+  password: "password",
+  password_confirmation: "password"
+)
+
 # 追加のユーザーをまとめて生成する
 99.times do |n|
   name  = Faker::Name.name
