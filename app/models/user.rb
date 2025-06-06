@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_many :microposts, dependent: :destroy
   # dependent: :destroyは、ユーザーが削除された場合に、そのユーザーに関連するマイクロポストも削除されることを意味する
   # 
+  # accessorは、インスタンス変数を定義するためのメソッド
   attr_accessor :remember_token
   # "before_save" (コールバック) works before the record is saved to the database
   # provided email address is downcased, thus no need of case_sensitive
@@ -50,6 +51,11 @@ class User < ApplicationRecord
 
   # 渡されたトークンがダイジェストと一致したらtrueを返す
   def authenticated?(remember_token)
+    # remember_digestがnil（記憶ダイジェストを持たない）とは、ユーザがすでにログアウトしているということ。　
+    return false if remember_digest.nil?
+    # is_password?メソッドは、BCrypt::Passwordオブジェクトに対して呼び出される
+    # remember_digestがnilの場合は、falseを返す
+    # remember_digestがnilの場合は、ユーザーがログインしていないことを意味する
     BCrypt::Password.new(remember_digest).is_password?(remember_token)
   end
   # ユーザーのログイン情報を破棄する

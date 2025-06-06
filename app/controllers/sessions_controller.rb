@@ -20,7 +20,12 @@ class SessionsController < ApplicationController
       forwarding_url = session[:forwarding_url] # フレンドリーフォワーディングのために、リダイレクト先のURLを取得する
       # reset_session should be called before log_in
       reset_session
-      remember user # 永続的セッションのためにユーザーをデータベースに記憶する
+      # to check remember_me check box is ticked or not
+      if params[:session][:remember_me] == '1'
+        remember user # 永続的セッションのためにユーザーをデータベースに記憶する
+      else
+        forget(user)
+      end
       log_in user
       # redirect_to user_url(user) と同じ意味
       # redirect_to user
@@ -40,7 +45,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
+    # log_out
+    log_out if logged_in? # ログインしている場合のみログアウトする(他のページからログアウトしてもエラーにならないように)
     redirect_to root_url, status: :see_other
   end
 end

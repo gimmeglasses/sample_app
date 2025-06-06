@@ -101,4 +101,10 @@ class UserTest < ActiveSupport::TestCase
     # @user.microposts.create!(content: "Lorem ipsum") creates a micropost associated with the user
     # assert_difference 'Micropost.count', -1 do checks that the count of Microposts decreases by 1 when the user is destroyed
   end
+
+  test "authenticated? should return false for a user with nil digest" do
+    assert_not @user.authenticated?('')
+  end
+
+
 end

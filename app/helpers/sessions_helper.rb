@@ -19,18 +19,26 @@ module SessionsHelper
 
   # 永続的セッションのためにユーザーをデータベースに記憶する
   def remember(user)
+    # rememberメソッドは、user.rbに定義されている。
+    # ユーザーのremember_tokenを生成し、データベースに保存する
     user.remember
+    # cookies.permanentは、ブラウザを閉じても有効なクッキーを作成する
+    # # user.idを暗号化して、cookiesに保存する
+    # # remember_tokenは、すでにハッシュ化されているので、暗号化する必要はない
     cookies.permanent.encrypted[:user_id] = user.id
     cookies.permanent[:remember_token] = user.remember_token
   end
 
-  # 記憶トークンのcookieに対応するユーザーを返す
+  # current_userメソッドはsession[:user_id]またはcookies.encrypted[:user_id]を使って、現在のユーザーを取得する
   def current_user
+    # session[:user_id]がある場合、それを利用する
     if (user_id = session[:user_id])
-      user = User.find_by(id: user_id)
-      if user && session[:session_token] == user.session_token
-        @current_user = user
-      end
+      # user = User.find_by(id: user_id)
+      # if user && session[:session_token] == user.session_token
+        # @current_user = user
+      # end
+      @current_user ||= User.find_by(id: user_id)
+    # session[:user_id]がない場合、cookies.encrypted[:user_id]があれば、それを利用する
     elsif (user_id = cookies.encrypted[:user_id])
       user = User.find_by(id: user_id)
       if user && user.authenticated?(cookies[:remember_token])
