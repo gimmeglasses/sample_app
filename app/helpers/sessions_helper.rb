@@ -24,6 +24,7 @@ module SessionsHelper
     user.remember
     # cookies.permanentは、ブラウザを閉じても有効なクッキーを作成する
     # # user.idを暗号化して、cookiesに保存する
+    # # ハッシュ化しない理由は、再度データベースから取得し複合化を行うため。
     # # remember_tokenは、すでにハッシュ化されているので、暗号化する必要はない
     cookies.permanent.encrypted[:user_id] = user.id
     cookies.permanent[:remember_token] = user.remember_token
@@ -33,10 +34,7 @@ module SessionsHelper
   def current_user
     # session[:user_id]がある場合、それを利用する
     if (user_id = session[:user_id])
-      # user = User.find_by(id: user_id)
-      # if user && session[:session_token] == user.session_token
-        # @current_user = user
-      # end
+      # メモ化を行うことでパフォーマンスへの悪影響を防止
       @current_user ||= User.find_by(id: user_id)
     # session[:user_id]がない場合、cookies.encrypted[:user_id]があれば、それを利用する
     elsif (user_id = cookies.encrypted[:user_id])
