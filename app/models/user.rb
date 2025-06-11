@@ -1,5 +1,13 @@
 class User < ApplicationRecord
   has_many :microposts, dependent: :destroy
+  has_many :active_relationships, class_name:  "Relationship",
+                                  foreign_key: "follower_id",
+                                  dependent:   :destroy
+  has_many :passive_relationships, class_name:  "Relationship",
+                                   foreign_key: "followed_id",
+                                   dependent:   :destroy
+  has_many :following, through: :active_relationships,  source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower
   # dependent: :destroyは、ユーザーが削除された場合に、そのユーザーに関連するマイクロポストも削除されることを意味する
   # 
   # accessorは、インスタンス変数を定義するためのメソッド
@@ -70,8 +78,34 @@ class User < ApplicationRecord
 
   # 試作feedの定義
   # 完全な実装は次章の「ユーザーをフォローする」を参照
+  # def feed
+  #   Micropost.where("user_id = ?", id)
+  #   # ?があることで、SQLクエリに代入する前にidがエスケープされるため、SQLインジェクション（SQL Injection）と呼ばれる深刻なセキュリティホールを回避できる
+  # end
+
+  # ユーザーのステータスフィードを返す
   def feed
-    Micropost.where("user_id = ?", id)
-    # ?があることで、SQLクエリに代入する前にidがエスケープされるため、SQLインジェクション（SQL Injection）と呼ばれる深刻なセキュリティホールを回避できる
+    following_ids = "SELECT followed_id FROM relationships
+                     WHERE  follower_id = :user_id"
+      # following_ids 
+    Micropost.where("user_id IN (#{following_ids})
+                     OR user_id = :user_id", user_id: id)
+             .includes(:user, image_attachment: :blob)     # eager loading　「N+1 クエリ問題」対策ここでは、マイクロポストに対応するユーザーと、添付画像があればその画像もincludesメソッドの引数に指定
   end
+
+  # ユーザーをフォローする
+  def follow(other_user)
+    following << other_user unless self == other_user
+  end
+
+  # ユーザーをフォロー解除する
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+
+  # 現在のユーザーが他のユーザーをフォローしていればtrueを返す
+  def following?(other_user)
+    following.include?(other_user)
+  end
+
 end
